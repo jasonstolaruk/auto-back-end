@@ -1,0 +1,45 @@
+name:                auto-back-end
+version:             0.1.0.0
+synopsis:            Demo of an automotive back end using Servant.
+license:             BSD3
+license-file:        LICENSE
+author:              Jason Stolaruk
+maintainer:          jason@detroitlabs.com
+copyright:           Copyright (c) 2016, Jason Stolaruk and Detroit Labs LLC
+category:            Web
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+executable auto-back-end
+  main-is:             Main.hs
+  other-modules:         Client
+                       , InitData
+                       , Server
+                       , Types
+  other-extensions:      DataKinds
+                       , DeriveGeneric
+                       , FlexibleInstances
+                       , GeneralizedNewtypeDeriving
+                       , MultiParamTypeClasses
+                       , OverloadedStrings
+                       , TypeOperators
+  build-depends:         base           >=4.8  && <4.9
+                       , bytestring     >=0.10 && <0.11
+                       , aeson          >=0.10 && <0.11
+                       , containers     >=0.5  && <0.6
+                       , either         >=4.4  && <5.0
+                       , http-types     >=0.9  && <0.10
+                       , pandoc         >=1.15 && <2.0
+                       , servant        >=0.4  && <0.5
+                       , servant-client >=0.4  && <0.5
+                       , servant-docs   >=0.4  && <0.5
+                       , servant-pandoc >=0.4  && <0.5
+                       , servant-server >=0.4  && <0.5
+                       , text           >=1.2  && <2.0
+                       , transformers   >=0.4  && <0.5
+                       , wai            >=3.0  && <4.0
+                       , warp           >=3.1  && <4.0
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+  ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N -Wall -Werror
