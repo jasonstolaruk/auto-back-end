@@ -67,7 +67,7 @@ Example usage:
 tryPutIssues (CaptureInt 0) [ Issue Battery High, Issue Brakes Low ]
 -}
 tryPutIssues :: CaptureInt -> [Issue] -> IO ()
-tryPutIssues i = tryEndpoint . putIssues i
+tryPutIssues ci = tryEndpoint . putIssues ci
 
 
 tryEndpoint :: (Show a) => EitherT ServantError IO a -> IO ()
