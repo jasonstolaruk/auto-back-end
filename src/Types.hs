@@ -2,12 +2,17 @@
 
 module Types where
 
+import Control.Monad (replicateM)
 import Data.Aeson (FromJSON(..), ToJSON(..), genericToJSON)
 import Data.Aeson.Types (defaultOptions)
+import Data.Char (chr)
+import Data.Ix (inRange)
 import Data.Text.Lazy (Text)
 import GHC.Generics (Generic)
+import qualified Data.Text.Lazy as T
 import Servant (Capture, FromText(..), Get, JSON, Post, Put, Raw, QueryParam, ReqBody, ToText(..), (:<|>), (:>))
 import Servant.Docs (DocCapture(..), DocQueryParam(..), ParamKind(..), ToCapture, ToParam, ToSample, toCapture, toParam, toSample)
+import Test.QuickCheck (Arbitrary, arbitrary, choose, elements, suchThat)
 
 
 type VehicleAPI =
@@ -38,10 +43,10 @@ data Issue = Issue { issueType :: IssueType
 
 data IssueType = Battery
                | Brakes
-               | Electrical deriving (Eq, Generic, Show, Ord)
+               | Electrical deriving (Bounded, Enum, Eq, Generic, Show, Ord)
 
 
-data Priority = High | Med | Low deriving (Eq, Generic, Show, Ord)
+data Priority = High | Med | Low deriving (Bounded, Enum, Eq, Generic, Show, Ord)
 
 
 data SortBy = ByType | ByPriority
@@ -71,6 +76,22 @@ instance ToJSON   Priority  where
   toJSON = genericToJSON defaultOptions
 instance ToJSON   Vehicle   where
   toJSON = genericToJSON defaultOptions
+
+
+instance Arbitrary Vehicle   where
+  arbitrary = Vehicle <$> v <*> y <*> m <*> is
+    where
+      v  = let genVinChar = chr <$> suchThat (choose (48, 90)) (not . inRange (58, 64))
+           in T.pack <$> replicateM 17 genVinChar
+      y  = choose (1980, 2017)
+      m  = elements [ "M. Plus", "Void", "Pure", "DeLorean" ]
+      is = choose (0, 5) >>= \n -> replicateM n arbitrary
+instance Arbitrary Issue     where
+  arbitrary = Issue <$> arbitrary <*> arbitrary
+instance Arbitrary IssueType where
+  arbitrary = elements [ minBound .. ]
+instance Arbitrary Priority  where
+  arbitrary = elements [ minBound .. ]
 
 
 -- ==================================================

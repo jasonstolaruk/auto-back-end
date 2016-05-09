@@ -1,4 +1,5 @@
 module Main ( main
+            , runMock
             , writeHtmlDoc
             , writeMarkdownDoc ) where
 
@@ -12,6 +13,7 @@ import Network.Wai.Handler.Warp (run)
 import qualified Data.IntMap.Lazy as IM (IntMap)
 import Servant.Docs (API, docs, markdown)
 import Servant.Docs.Pandoc (pandoc)
+import Servant.Mock (mock)
 import Servant.Server (serve)
 import Text.Pandoc (writeHtmlString)
 import Text.Pandoc.Options (def)
@@ -23,6 +25,10 @@ main = run 8081 . app =<< newIORef vehicleTbl
 
 app :: IORef (IM.IntMap Vehicle) -> Application
 app = serve vehicleAPIWithDocs . serverWithDocs
+
+
+runMock :: IO ()
+runMock = run 8081 . serve vehicleAPI . mock $ vehicleAPI
 
 
 -- This binding encapsulates internal info about our API spec and forms the basis for the documentation we generate.

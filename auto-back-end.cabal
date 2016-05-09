@@ -31,9 +31,11 @@ executable auto-back-end
                        , either         >=4.4  && <5.0
                        , http-types     >=0.9  && <0.10
                        , pandoc         >=1.15 && <2.0
+                       , QuickCheck     >=2.8  && <3.0
                        , servant        >=0.4  && <0.5
                        , servant-client >=0.4  && <0.5
                        , servant-docs   >=0.4  && <0.5
+                       , servant-mock   ==0.4.*
                        , servant-pandoc >=0.4  && <0.5
                        , servant-server >=0.4  && <0.5
                        , text           >=1.2  && <2.0
